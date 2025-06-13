@@ -1,0 +1,86 @@
+#logo {
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 10px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 10px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 260px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+}
+#fla{
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 290px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 40px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 194px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+     cursor: pointer;
+ transition: transform 0.3s ease-in-out; /* Transição para a taça também */
+}
+#fla:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
+}
+#vasco{
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 280px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 350px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 204px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+     cursor: pointer;
+ transition: transform 0.3s ease-in-out; /* Transição para a taça também */
+}
+#vasco:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
+}#fogo{
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 280px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 700px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 224px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+    cursor: pointer;
+ transition: transform 0.3s ease-in-out; /* Transição para a taça também */
+}
+#fogo:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
+}
+#flu{
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 220px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 950px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 370px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+    cursor: pointer;
+ transition: transform 0.3s ease-in-out; /* Transição para a taça também */
+}
+#flu:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
+}
+  /* Código do gradiente */
+    body{        
+        background: linear-gradient(to bottom, #011b92, #236ef8, #6495ED); /* Gradiente de tons de azul */
+            height: 100vh; /* Garante que o gradiente preencha toda a altura da tela */
+            margin: 0; /* Remove a margem padrão do body */
+            display: flex; /* Para centralizar o conteúdo, se houver */
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            color: #333; /* Cor do texto para contraste */
+            font-family: sans-serif;
+            
+        }
+
+        h1 {
+            margin-top: -70px;
+            font-size: 3em; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* Sombra para o texto */
+            color: #fcfafa; /* Qual o maior time do Rio */
+            
+        }
+
+        p {
+            font-size: 1.2em;
+            max-width: 80%;
+            margin: 20px auto;
+        }  

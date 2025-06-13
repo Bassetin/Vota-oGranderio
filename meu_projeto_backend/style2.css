@@ -1,0 +1,119 @@
+#logo {
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 10px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 10px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 260px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+}
+
+/* Estilos para o contêiner <figure> */
+figure {
+    position: absolute; /* Para posicionar a figura como um todo */
+    margin: 0; /* Remover margens padrão da figure */
+    padding: 0;
+    text-align: center; /* Centraliza a legenda sob a imagem */
+    z-index: 1000;
+}
+
+/* Estilos gerais para as imagens dentro da figure */
+figure img.escolha {
+    /* Removido o 'position: absolute' daqui para a imagem em si */
+    width: 100%; /* Imagem preenche a largura da figure */
+    height: auto;
+    display: block; /* Remove espaço extra abaixo da imagem */
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+figure img.escolha:hover {
+    transform: scale(1.1);
+}
+
+/* Estilos para a legenda <figcaption> */
+figcaption {
+    color: #fcfafa; /* Cor do texto da legenda */
+    font-size: 1.2em; /* Tamanho da fonte da legenda */
+    font-weight: bold; /* Deixa o texto em negrito */
+    margin-top: 10px; /* Espaço entre a imagem e a legenda */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* Sombra para o texto da legenda */
+}
+
+#wifi{
+    position: absolute;
+    top: 300px;
+    left: 50px;
+    width: 250px;
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+#wifi:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */}
+#cam{
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 350px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 390px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 185px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+     cursor: pointer;
+ transition: transform 0.3s ease-in-out; /* Transição para a taça também */
+}
+#cam:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
+}#tech{
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 350px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 650px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 300px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+    cursor: pointer;
+ transition: transform 0.3s ease-in-out; /* Transição para a taça também */
+}
+#tech:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
+}
+#robo{
+    position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
+    top: 320px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 1000px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 180px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    height: auto;     /* A altura se ajustará proporcionalmente */
+    z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
+    cursor: pointer;
+ transition: transform 0.3s ease-in-out; /* Transição para a taça também */
+}
+#robo:hover {
+    transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
+}
+
+  /* Código do gradiente */
+    body{        
+        background: linear-gradient(to bottom, #011b92, #236ef8, #6495ED); /* Gradiente de tons de azul */
+            height: 100vh; /* Garante que o gradiente preencha toda a altura da tela */
+            margin: 0; /* Remove a margem padrão do body */
+            display: flex; /* Para centralizar o conteúdo, se houver */
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            color: #333; /* Cor do texto para contraste */
+            font-family: sans-serif;
+            
+        }
+
+        h1 {
+            margin-top: -150px;
+            font-size: 3em; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* Sombra para o texto */
+            color: #fcfafa; /* Qual o maior time do Rio */
+            
+        }
+
+        p {
+            font-size: 2.2em;
+            max-width: 80%;
+            margin: 20px auto;
+             color: #fcfafa; /* Qual o maior time do Rio */
+        }  

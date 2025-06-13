@@ -1,0 +1,9 @@
+# Ignorar a pasta node_modules em ambos os diretórios
+node_modules/
+
+# Ignorar o arquivo do banco de dados SQLite
+votos.db
+
+# Outros arquivos que você pode querer ignorar (opcional)
+.env # Se você tiver variáveis de ambiente
+*.log # Arquivos de log
