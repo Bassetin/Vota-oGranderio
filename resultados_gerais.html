@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados e Agradecimento</title>
+    <link rel="stylesheet" href="style.css"> <!-- Reutiliza o CSS principal -->
+    <style>
+        /* Estilos específicos para esta página de resultados */
+        body {
+            /* Garante que o body tenha espaço superior suficiente para a logo e o conteúdo */
+            padding-top: 20px; /* Adiciona um pouco de preenchimento no topo do body */
+            box-sizing: border-box; /* Garante que padding e border não aumentem a largura/altura total */
+        }
+
+        #logo {
+            margin-bottom: 20px; /* Garante espaço abaixo da logo */
+        }
+
+        h1 {
+            margin-top: 0; /* Remove margem superior padrão que pode puxar para cima */
+            margin-bottom: 15px; /* Ajuste: Aumentei a margem inferior para afastar mais do parágrafo */
+            color: #fcfafa; /* Cor para o H1 */
+            text-align: center; /* Centraliza o título */
+        }
+
+        p {
+            margin-top: 0; /* Remove margem superior padrão */
+            margin-bottom: 40px; /* **** AJUSTE AQUI: Aumenta a margem inferior para afastar do results-container **** */
+            color: #fcfafa; /* Cor para o parágrafo */
+            text-align: center; /* Centraliza o texto do parágrafo */
+            font-size: 1.1em; /* Um pouco maior para destaque */
+        }
+
+        .results-container {
+            margin-top: 20px; /* Mantém margem superior para afastar do conteúdo acima */
+            text-align: left;
+            width: 90%;
+            max-width: 700px;
+            background-color: rgba(5, 5, 5, 0.1); /* Cor de fundo do contêiner principal de resultados */
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex; /* Para alinhar as duas colunas de resultados */
+            flex-wrap: wrap; /* Permite quebrar em telas menores */
+            justify-content: space-around;
+            gap: 20px;
+        }
+        .results-section {
+            flex: 1; /* Faz as seções ocuparem o espaço disponível */
+            min-width: 280px; /* Largura mínima antes de quebrar */
+            padding: 15px;
+            background-color: rgba(0, 27, 146, 0.05); /* Cor de fundo mais neutra ou temática */
+            border-radius: 10px;
+        }
+        .results-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fcfafa;
+        }
+        .results-container ul {
+            list-style: none;
+            padding: 0;
+            max-height: 250px; /* **** AJUSTE AQUI: Altura máxima para as listas de votos **** */
+            overflow-y: auto; /* **** AJUSTE AQUI: Adiciona barra de rolagem vertical se o conteúdo exceder a altura **** */
+            scrollbar-width: thin; /* Estilo da barra de rolagem para navegadores Firefox */
+            scrollbar-color: #011b92 rgba(255, 255, 255, 0.1); /* Cor da barra de rolagem */
+        }
+        .results-container ul::-webkit-scrollbar {
+            width: 8px; /* Largura da barra de rolagem para navegadores Webkit (Chrome, Safari) */
+        }
+        .results-container ul::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1); /* Cor da trilha da barra de rolagem */
+            border-radius: 10px;
+        }
+        .results-container ul::-webkit-scrollbar-thumb {
+            background-color: #011b92; /* Cor do "polegar" da barra de rolagem */
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+        }
+        .results-container li {
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fcfafa;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .results-container li span:first-child {
+            text-transform: capitalize;
+        }
+        .results-container li span:last-child {
+            background-color: #011b92;
+            padding: 5px 10px;
+            border-radius: 6px;
+            min-width: 30px;
+            text-align: center;
+        }
+        .countdown {
+            color: #fcfafa;
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <img id="logo" src="imagens/estaciodesa.png" alt="Logo da Estácio">
+
+    <h1>Muito obrigado por participar!</h1>
+    <p>Seus votos e seu cadastro foram registrados com sucesso.</p>
+    
+    <div class="results-container">
+        <div class="results-section">
+            <h2>Votos de Times</h2>
+            <ul id="lista-votos-times">
+                <li>Carregando resultados...</li>
+            </ul>
+        </div>
+        <div class="results-section">
+            <h2>Votos de Tecnologia</h2>
+            <ul id="lista-votos-tech">
+                <li>Carregando resultados...</li>
+            </ul>
+        </div>
+    </div>
+
+    <p class="countdown">Você será redirecionado para a página inicial em <span id="timer">7</span> segundos...</p>
+
+    <!-- Script para carregar e exibir os resultados e lidar com o temporizador -->
+    <script src="script_resultados_gerais.js"></script>
+</body>
+</html>

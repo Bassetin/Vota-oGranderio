@@ -1,97 +1,141 @@
 // server.js
 
+// Importa os módulos necessários
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
+
+// Cria uma instância do aplicativo Express
 const app = express();
 const PORT = 3000;
 
+// Configura os middlewares para o aplicativo Express
 app.use(cors());
 app.use(express.json());
 
 // Conecta ao banco de dados SQLite
-// O arquivo 'votos.db' será criado na mesma pasta se não existir
+// O arquivo 'votos.db' será criado na mesma pasta onde server.js está sendo executado se não existir.
 const db = new sqlite3.Database('./votos.db', (err) => {
     if (err) {
         console.error('Erro ao conectar ao banco de dados:', err.message);
     } else {
         console.log('Conectado ao banco de dados SQLite.');
-        // **** MUDANÇA AQUI: NOVA ESTRUTURA DA TABELA ****
-        // A tabela agora se chama 'contagem_votos' e tem 'nome_time' e 'total_votos'
-        db.run(`CREATE TABLE IF NOT EXISTS contagem_votos (
-            nome_time TEXT PRIMARY KEY,
-            total_votos INTEGER DEFAULT 0
+
+        // **** TABELA ÚNICA: users_votes ****
+        // client_id é AUTOINCREMENT. nome, email e telefone são NOT NULL (na inserção) e email/telefone UNIQUE.
+        db.run(`CREATE TABLE IF NOT EXISTS users_votes (
+            client_id INTEGER PRIMARY KEY AUTOINCREMENT,   -- ID único do cliente (gerado pelo DB na inserção)
+            nome TEXT NOT NULL,                           -- Nome do cliente (obrigatório na inserção)
+            email TEXT UNIQUE NOT NULL,                   -- E-mail do cliente (obrigatório e único)
+            telefone TEXT UNIQUE NOT NULL,                -- Telefone do cliente (obrigatório e único)
+            team_vote TEXT,                               -- Voto do time (pode ser NULL se pular a votação)
+            tech_vote TEXT,                               -- Voto da tecnologia (pode ser NULL se pular a votação)
+            data_registro DATETIME DEFAULT CURRENT_TIMESTAMP -- Data/hora do registro
         )`, (err) => {
             if (err) {
-                console.error('Erro ao criar tabela contagem_votos:', err.message);
+                console.error('Erro ao criar tabela users_votes:', err.message);
             } else {
-                console.log('Tabela "contagem_votos" verificada/criada.');
+                console.log('Tabela "users_votes" verificada/criada.');
             }
         });
     }
 });
 
-// Rota para registrar um voto
-app.post('/votar', (req, res) => {
-    const { time } = req.body; // Pega o time enviado no corpo da requisição JSON
+// --- Rota para Registrar Dados do Cliente (Agora a Principal Rota de Inserção) ---
+// Recebe nome, email, telefone, team_vote e tech_vote.
+// Insere um novo registro COMPLETO.
+app.post('/register-client', (req, res) => {
+    const { nome, email, telefone, team_vote, tech_vote } = req.body;
 
-    if (!time) {
-        return res.status(400).json({ message: 'Time não fornecido.' });
+    // Validação de campos obrigatórios do cadastro
+    if (!nome || !email || !telefone) {
+        return res.status(400).json({ message: 'Nome, e-mail e telefone são obrigatórios.' });
     }
 
-    // **** MUDANÇA AQUI: Lógica de INSERIR OU ATUALIZAR ****
-    // 1. Tenta inserir o time com 0 votos. Se o time já existir, IGNORA a inserção.
-    const insertSql = `INSERT OR IGNORE INTO contagem_votos (nome_time, total_votos) VALUES (?, 0)`;
-    db.run(insertSql, [time], function(err) {
-        if (err) {
-            console.error('Erro ao inserir time inicialmente:', err.message);
-            return res.status(500).json({ message: 'Erro ao registrar voto.' });
-        }
+    db.serialize(() => {
+        db.run('BEGIN TRANSACTION;');
 
-        // 2. Sempre atualiza o contador de votos para o time.
-        const updateSql = `UPDATE contagem_votos SET total_votos = total_votos + 1 WHERE nome_time = ?`;
-        db.run(updateSql, [time], function(err) {
+        // 1. Verifica se o e-mail ou telefone já estão em uso.
+        // Como ambos são UNIQUE na tabela, tentar inserir diretamente com um duplicado causará um erro.
+        // Fazemos uma pré-verificação para dar uma mensagem mais amigável.
+        db.get(`SELECT client_id FROM users_votes WHERE email = ? OR telefone = ?`, [email, telefone], (err, row) => {
             if (err) {
-                console.error('Erro ao atualizar voto:', err.message);
-                return res.status(500).json({ message: 'Erro ao registrar voto.' });
+                db.run('ROLLBACK;', () => {
+                    console.error('Erro ao verificar email/telefone duplicado:', err.message);
+                    return res.status(500).json({ message: 'Erro interno ao verificar dados existentes.' });
+                });
+                return;
             }
-            
-            // **** MUDANÇA AQUI: Nova consulta para pegar o total atual ****
-            const selectTotalSql = `SELECT total_votos FROM contagem_votos WHERE nome_time = ?`;
-            db.get(selectTotalSql, [time], (selectErr, row) => {
-                if (selectErr) {
-                    console.error('Erro ao buscar total de votos após atualização:', selectErr.message);
-                    return res.status(500).json({ message: 'Erro ao registrar voto (falha ao buscar total).' });
+
+            if (row) { // Se 'row' existe, significa que o e-mail ou telefone já estão em uso
+                db.run('ROLLBACK;', () => {
+                    console.warn(`Tentativa de cadastro com e-mail (${email}) ou telefone (${telefone}) já existente.`);
+                    return res.status(409).json({ message: 'Usuário já existente, e-mail ou telefone já cadastrado.' });
+                });
+                return;
+            }
+
+            // 2. Se e-mail e telefone são únicos, insere o novo registro completo.
+            // O client_id será gerado automaticamente pelo AUTOINCREMENT.
+            const insertSql = `INSERT INTO users_votes (nome, email, telefone, team_vote, tech_vote) VALUES (?, ?, ?, ?, ?)`;
+            db.run(insertSql, [nome, email, telefone, team_vote, tech_vote], function(err) {
+                if (err) {
+                    db.run('ROLLBACK;', () => {
+                        console.error('Erro ao inserir novo registro completo:', err.message);
+                        return res.status(500).json({ message: 'Erro ao registrar cliente.' });
+                    });
+                    return;
                 }
-                const novoTotal = row ? row.total_votos : 0;
-                console.log(`Voto registrado para: ${time}. Novo total: ${novoTotal}`); 
-                res.status(200).json({ message: 'Voto registrado com sucesso!', timeVotado: time, novoTotal: novoTotal });
+                
+                const newClientId = this.lastID; // Pega o client_id auto-gerado
+                
+                db.run('COMMIT;', (commitErr) => {
+                    if (commitErr) {
+                        console.error('Erro no commit da transação (register-client):', commitErr.message);
+                        return res.status(500).json({ message: 'Erro interno ao finalizar cadastro.' });
+                    }
+                    console.log(`Novo cliente registrado: ID ${newClientId}, Nome ${nome}, E-mail ${email}, Telefone ${telefone}`);
+                    res.status(201).json({ message: 'Cliente registrado com sucesso!', client_id: newClientId });
+                });
             });
         });
     });
 });
 
-// Rota para obter a contagem de votos por time (já estava quase pronta, só ajustamos o nome da tabela)
-app.get('/votos', (req, res) => {
-    // Consulta SQL: Seleciona nome_time e total_votos da nova tabela
-    const sql = `SELECT nome_time, total_votos FROM contagem_votos ORDER BY total_votos DESC`;
+// --- Rota para Obter Resultados Agregados de Votos de Times ---
+// Conta quantos votos cada time recebeu na coluna 'team_vote'.
+app.get('/votos-times-results', (req, res) => {
+    const sql = `SELECT team_vote, COUNT(*) AS total_votos FROM users_votes WHERE team_vote IS NOT NULL GROUP BY team_vote ORDER BY total_votos DESC`;
     
     db.all(sql, [], (err, rows) => {
         if (err) {
-            console.error('Erro ao buscar contagem de votos:', err.message);
-            return res.status(500).json({ message: 'Erro ao buscar contagem de votos.' });
+            console.error('Erro ao buscar resultados de times:', err.message);
+            return res.status(500).json({ message: 'Erro ao buscar resultados de times.' });
         }
-        // Retorna a contagem de votos por time
-        res.status(200).json({ votosPorTime: rows });
+        res.status(200).json({ teamVotes: rows });
     });
 });
 
-// Inicia o servidor
+// --- Rota para Obter Resultados Agregados de Votos de Tecnologia ---
+// Conta quantos votos cada tecnologia recebeu na coluna 'tech_vote'.
+app.get('/votos-tech-results', (req, res) => {
+    const sql = `SELECT tech_vote, COUNT(*) AS total_votos FROM users_votes WHERE tech_vote IS NOT NULL GROUP BY tech_vote ORDER BY total_votos DESC`;
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            console.error('Erro ao buscar resultados de tecnologia:', err.message);
+            return res.status(500).json({ message: 'Erro ao buscar resultados de tecnologia.' });
+        }
+        res.status(200).json({ techVotes: rows });
+    });
+});
+
+// Inicia o servidor e o faz escutar por requisições na porta definida
 app.listen(PORT, () => {
     console.log(`Servidor backend rodando em http://localhost:${PORT}`);
 });
 
-// Fechar o banco de dados quando o aplicativo for encerrado (boa prática)
+// Lida com o encerramento do processo (Ctrl+C) para fechar a conexão com o banco de dados
 process.on('SIGINT', () => {
     db.close((err) => {
         if (err) {
