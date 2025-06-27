@@ -1,16 +1,16 @@
 #logo {
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 5px;        /* Define a distância do topo (ajuste conforme necessário) */
+    top: -60px;        /* Define a distância do topo (ajuste conforme necessário) */
     left: 10px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 260px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    width: 380px;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
 }
 #fla{
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 260px;        /* Define a distância do topo (ajuste conforme necessário) */
+    top: 59%;        /* Define a distância do topo (ajuste conforme necessário) */
     left: 40px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 194px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    width: 14%;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
      cursor: pointer;
@@ -21,9 +21,9 @@
 }
 #vasco{
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 250px;        /* Define a distância do topo (ajuste conforme necessário) */
+    top: 55%;        /* Define a distância do topo (ajuste conforme necessário) */
     left: 350px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 204px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    width: 15%;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
      cursor: pointer;
@@ -33,9 +33,9 @@
     transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */
 }#fogo{
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 250px;        /* Define a distância do topo (ajuste conforme necessário) */
+    top: 55%;        /* Define a distância do topo (ajuste conforme necessário) */
     left: 700px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 224px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    width: 16.5%;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
     cursor: pointer;
@@ -46,9 +46,9 @@
 }
 #flu{
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 190px;        /* Define a distância do topo (ajuste conforme necessário) */
+    top: 45%;        /* Define a distância do topo (ajuste conforme necessário) */
     left: 950px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 370px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    width: 27.2%;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
     cursor: pointer;
@@ -72,8 +72,10 @@
         }
 
         h1 {
-            margin-top: -180px;
-            font-size: 3em; 
+            margin-top: -200px; height: auto; 
+            font-family: Open sans-serif;
+            font-size: 4em; 
+            max-width: 80%;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* Sombra para o texto */
             color: #fcfafa; /* Qual o maior time do Rio */
             

@@ -7,16 +7,32 @@
     <link rel="stylesheet" href="style.css"> <!-- Reutiliza o CSS principal -->
     <style>
         /* Estilos específicos para o formulário de cadastro */
+         h1 {
+            margin-top: -250px;
+            position: absolute;
+            font-family: sans-serif; 
+        }
+        #curso{
+             margin-top: -55px;
+             font-size: 25px;
+            position: relative;
+        }
+
+        
         .form-container {
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-top: 50px;
+            margin-top: 250px;
             width: 90%;
-            max-width: 400px;
+            max-width: 800px; /* Aumentado para acomodar duas colunas */
             text-align: center;
+            display: flex; /* Adicionado para centralizar o formulário dentro dele */
+            flex-direction: column; /* Conteúdo vertical */
+            align-items: center; /* Centraliza itens horizontalmente */
         }
+        
         .form-container h2 {
             color: #fcfafa;
             margin-bottom: 25px;
@@ -24,6 +40,7 @@
         .form-group {
             margin-bottom: 20px;
             text-align: left;
+            width: 100%; /* Ocupa a largura total da coluna */
         }
         .form-group label {
             display: block;
@@ -33,7 +50,8 @@
         }
         .form-group input[type="text"],
         .form-group input[type="email"],
-        .form-group input[type="tel"] { /* **** NOVO: Estilo para input type="tel" **** */
+        .form-group input[type="tel"],
+        .form-group select {
             width: calc(100% - 20px); /* Padding */
             padding: 10px;
             border: none;
@@ -42,9 +60,20 @@
             color: #fff;
             font-size: 1em;
             outline: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23fcfafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
         }
         .form-group input::placeholder {
             color: rgba(255, 255, 255, 0.6);
+        }
+        .form-group select option {
+            background-color: #011b92;
+            color: #fff;
         }
         button {
             background-color: #4CAF50; /* Verde */
@@ -55,8 +84,11 @@
             cursor: pointer;
             font-size: 1.1em;
             transition: background-color 0.3s ease;
+            opacity: 0.6; 
+            cursor: not-allowed;
+            margin-top: 20px; /* Espaço acima do botão */
         }
-        button:hover {
+        button:hover:not(:disabled) {
             background-color: #45a049;
         }
         .message {
@@ -64,32 +96,78 @@
             font-weight: bold;
         }
         .message.success {
-            color: #66FF66; /* Verde claro */
+            color: #66FF66;
         }
         .message.error {
-            color: #FF6666; /* Vermelho claro */
+            color: #FF6666;
         }
+
+        /* **** NOVOS ESTILOS PARA LAYOUT DE COLUNAS **** */
+        #cadastroForm {
+            width: 100%; /* Ocupa a largura total do form-container */
+            display: flex; /* Usa flexbox para organizar os grupos de colunas */
+            flex-wrap: wrap; /* Permite que as colunas quebrem em telas menores */
+            justify-content: center; /* Centraliza as colunas */
+            gap: 20px; /* Espaço entre as colunas */
+        }
+
+        .form-column {
+            flex: 1; /* Faz as colunas ocuparem o espaço disponível */
+            min-width: 300px; /* Largura mínima para cada coluna antes de quebrar */
+            display: flex;
+            flex-direction: column; /* Os itens dentro da coluna se empilham verticalmente */
+            gap: 10px; /* Espaço entre os form-groups dentro de uma coluna */
+        }
+        /* Ajuste para garantir que o "Telefone" e "Curso" fiquem na segunda coluna */
+        .form-column:nth-child(1) { /* Primeira coluna (Nome, Email) */
+            order: 1; 
+        }
+        .form-column:nth-child(2) { /* Segunda coluna (Telefone, Curso) */
+            order: 2;
+        }
+
     </style>
 </head>
 <body>
     <img id="logo" src="imagens/estaciodesa.png" alt="Logo da Estácio">
+
+    <h1 id = "curso">Alunos do curso de Ciencias da Computação</h1>
 
     <h1>Cadastre-se para participar!</h1>
 
     <div class="form-container">
         <h2>Seus Dados</h2>
         <form id="cadastroForm">
-            <div class="form-group">
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+            <!-- Coluna 1: Nome e E-mail -->
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
-            </div>
-            <div class="form-group">
-                <label for="telefone">Telefone:</label>
-                <input type="tel" id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" required> <!-- **** NOVO CAMPO: Telefone **** -->
+
+            <!-- Coluna 2: Telefone e Curso de Interesse -->
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="telefone">Telefone:</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="curso_interesse">Curso de Interesse:</label>
+                    <select id="curso_interesse" name="curso_interesse" required>
+                        <option value="">Selecione um curso</option>
+                        <option value="analise_e_desenvolvimento">Análise e Desenvolvimento de Sistemas</option>
+                        <option value="ciencia_de_dados">Ciência de Dados</option>
+                        <option value="engenharia_de_software">Engenharia de Software</option>
+                        <option value="redes_de_computadores">Redes de Computadores</option>
+                        <option value="gestao_de_ti">Gestão de TI</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
             </div>
             <button type="submit">Cadastrar</button>
         </form>

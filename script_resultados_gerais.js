@@ -3,11 +3,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     const listaVotosTimesElemento = document.getElementById('lista-votos-times');
     const listaVotosTechElemento = document.getElementById('lista-votos-tech');
-    const timerElement = document.getElementById('timer');
+    // timerElement não será mais usado para contagem regressiva visível, mas pode ser mantido
+    // caso você queira usá-lo para alguma mensagem de inatividade futura.
+    const timerElement = document.getElementById('timer'); 
 
     // Rotas do backend para obter os resultados agregados
     const urlResultadosTimes = 'http://localhost:3000/votos-times-results';
     const urlResultadosTech = 'http://localhost:3000/votos-tech-results';
+
+    let inactivityTimeout; // Variável para armazenar o timeout de inatividade
+    const INACTIVITY_DELAY_SECONDS_TO_STAY_ACTIVE = 15; // Tempo de inatividade para "manter a página ativa"
 
     // --- Função para buscar e exibir os resultados de Times ---
     function fetchTeamResults() {
@@ -21,11 +26,20 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 listaVotosTimesElemento.innerHTML = ''; // Limpa "Carregando resultados..."
                 if (data.teamVotes && data.teamVotes.length > 0) {
-                    data.teamVotes.forEach(voto => {
+                    data.teamVotes.forEach((voto, index) => { // Adicionado 'index' para obter a posição
                         const listItem = document.createElement('li');
-                        // Garante que o nome do time seja exibido de forma legível (ex: "flamengo" -> "Flamengo")
                         const displayName = voto.team_vote.charAt(0).toUpperCase() + voto.team_vote.slice(1);
-                        listItem.innerHTML = `<span>${displayName}</span><span>${voto.total_votos}</span>`;
+                        
+                        // **** AJUSTE AQUI: Adicionado data-rank="${index + 1}" à imagem ****
+                        listItem.innerHTML = `
+                            <div class="team-result-item">
+                                <img src="imagens_times/${voto.team_vote}.png" 
+                                     alt="${displayName} Escudo" 
+                                     class="team-result-img" 
+                                     data-rank="${index + 1}"> 
+                            </div>
+                            <span>${voto.total_votos}</span>
+                        `;
                         listaVotosTimesElemento.appendChild(listItem);
                     });
                 } else {
@@ -52,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.techVotes && data.techVotes.length > 0) {
                     data.techVotes.forEach(voto => {
                         const listItem = document.createElement('li');
-                        // Garante que o nome da tecnologia seja exibido de forma legível
                         const displayName = voto.tech_vote.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                         listItem.innerHTML = `<span>${displayName}</span><span>${voto.total_votos}</span>`;
                         listaVotosTechElemento.appendChild(listItem);
@@ -71,26 +84,34 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchTeamResults();
     fetchTechResults();
 
-    // --- Lógica do Temporizador para Redirecionamento ---
-    let tempoRestante = 10; // Segundos para redirecionar (agora 7 segundos)
-    if (timerElement) {
-        timerElement.textContent = tempoRestante; // Atualiza o timer inicial no HTML
+    // **** LÓGICA DE TEMPORIZADOR E REDIRECIONAMENTO ****
+
+    // Função que redireciona para o index.html ao detectar interação
+    function redirectToIndexOnActivity() {
+        clearTimeout(inactivityTimeout); // Garante que nenhum timeout pendente tente disparar
+        // Não é necessário limpar localStorage.removeItem('clientId') aqui, pois ele é limpo na página index.
+        console.log('Interação detectada na página de resultados. Redirecionando para a página inicial.');
+        window.location.href = 'index.html'; // Redireciona imediatamente
     }
 
-    const countdownInterval = setInterval(() => {
-        tempoRestante--;
-        if (timerElement) {
-            timerElement.textContent = tempoRestante;
-        }
-        
-        if (tempoRestante <= 0) {
-            clearInterval(countdownInterval); // Para o contador
-            
-            // **** NOVO: Limpa o client_id do localStorage antes de redirecionar ****
-            localStorage.removeItem('clientId'); 
-            console.log('Client ID limpo do localStorage. Nova sessão será iniciada.');
+    // Esta função simplesmente reinicia o contador de inatividade para manter a página aberta.
+    // Ela não causará um redirecionamento, apenas impede que o browser entre em modo de "hibernação".
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimeout); // Limpa qualquer timeout anterior
+        inactivityTimeout = setTimeout(() => {
+            console.log('Página de resultados em inatividade por ' + INACTIVITY_DELAY_SECONDS_TO_STAY_ACTIVE + ' segundos. Permanecendo na página.');
+            // Reinicia o timer para continuar monitorando a inatividade e manter a página
+            resetInactivityTimer(); 
+        }, INACTIVITY_DELAY_SECONDS_TO_STAY_ACTIVE * 1000);
+    }
 
-            window.location.href = 'index.html'; // Redireciona para a página inicial
-        }
-    }, 1000); // Atualiza a cada 1 segundo
+    // Inicia o monitoramento de inatividade ao carregar a página
+    resetInactivityTimer();
+
+    // Adiciona ouvintes de evento para detectar qualquer interação e redirecionar
+    document.addEventListener('mousemove', redirectToIndexOnActivity);
+    document.addEventListener('keypress', redirectToIndexOnActivity);
+    document.addEventListener('click', redirectToIndexOnActivity);
+    document.addEventListener('touchstart', redirectToIndexOnActivity); // Para dispositivos móveis
+    document.addEventListener('scroll', redirectToIndexOnActivity); // Também para rolagem
 });

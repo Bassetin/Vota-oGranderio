@@ -8,49 +8,54 @@
     <style>
         /* Estilos específicos para esta página de resultados */
         body {
-            /* Garante que o body tenha espaço superior suficiente para a logo e o conteúdo */
-            padding-top: 20px; /* Adiciona um pouco de preenchimento no topo do body */
-            box-sizing: border-box; /* Garante que padding e border não aumentem a largura/altura total */
+            min-height: 100vh; 
+            justify-content: flex-start;
+            padding-top: 30px; 
+            box-sizing: border-box; 
         }
 
         #logo {
-            margin-bottom: 20px; /* Garante espaço abaixo da logo */
+            margin-bottom: 30px; 
         }
 
         h1 {
-            margin-top: 0; /* Remove margem superior padrão que pode puxar para cima */
-            margin-bottom: 15px; /* Ajuste: Aumentei a margem inferior para afastar mais do parágrafo */
-            color: #fcfafa; /* Cor para o H1 */
-            text-align: center; /* Centraliza o título */
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #fcfafa;
+            text-align: center;
+            font-size: 2.5em;
         }
 
         p {
-            margin-top: 0; /* Remove margem superior padrão */
-            margin-bottom: 40px; /* **** AJUSTE AQUI: Aumenta a margem inferior para afastar do results-container **** */
-            color: #fcfafa; /* Cor para o parágrafo */
-            text-align: center; /* Centraliza o texto do parágrafo */
-            font-size: 1.1em; /* Um pouco maior para destaque */
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #fcfafa;
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.5;
         }
 
         .results-container {
-            margin-top: 20px; /* Mantém margem superior para afastar do conteúdo acima */
+            margin-top: 20px;
             text-align: left;
             width: 90%;
             max-width: 700px;
-            background-color: rgba(5, 5, 5, 0.1); /* Cor de fundo do contêiner principal de resultados */
+            background-color: rgba(5, 5, 5, 0.1);
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex; /* Para alinhar as duas colunas de resultados */
-            flex-wrap: wrap; /* Permite quebrar em telas menores */
+            display: flex;
+            flex-wrap: wrap;
             justify-content: space-around;
             gap: 20px;
+            flex-grow: 1;
+            padding-bottom: 30px; 
         }
         .results-section {
-            flex: 1; /* Faz as seções ocuparem o espaço disponível */
-            min-width: 280px; /* Largura mínima antes de quebrar */
+            flex: 1;
+            min-width: 280px;
             padding: 15px;
-            background-color: rgba(0, 27, 146, 0.05); /* Cor de fundo mais neutra ou temática */
+            background-color: rgba(0, 27, 146, 0.05);
             border-radius: 10px;
         }
         .results-container h2 {
@@ -61,22 +66,6 @@
         .results-container ul {
             list-style: none;
             padding: 0;
-            max-height: 250px; /* **** AJUSTE AQUI: Altura máxima para as listas de votos **** */
-            overflow-y: auto; /* **** AJUSTE AQUI: Adiciona barra de rolagem vertical se o conteúdo exceder a altura **** */
-            scrollbar-width: thin; /* Estilo da barra de rolagem para navegadores Firefox */
-            scrollbar-color: #011b92 rgba(255, 255, 255, 0.1); /* Cor da barra de rolagem */
-        }
-        .results-container ul::-webkit-scrollbar {
-            width: 8px; /* Largura da barra de rolagem para navegadores Webkit (Chrome, Safari) */
-        }
-        .results-container ul::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1); /* Cor da trilha da barra de rolagem */
-            border-radius: 10px;
-        }
-        .results-container ul::-webkit-scrollbar-thumb {
-            background-color: #011b92; /* Cor do "polegar" da barra de rolagem */
-            border-radius: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.05);
         }
         .results-container li {
             background-color: rgba(255, 255, 255, 0.1);
@@ -84,15 +73,51 @@
             padding: 10px 15px;
             border-radius: 8px;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Mantém espaço entre o item e a contagem */
             align-items: center;
             color: #fcfafa;
             font-size: 1.1em;
             font-weight: bold;
         }
-        .results-container li span:first-child {
-            text-transform: capitalize;
+
+        /* Contêiner para a imagem (agora sem texto ao lado) */
+        .team-result-item {
+            display: flex; /* Mantém a flexibilidade caso queira adicionar algo depois */
+            align-items: center;
         }
+
+        /* **** AJUSTE AQUI: Tamanho padrão maior do escudo no resultado **** */
+        .team-result-img {
+            width: 70px; /* Tamanho base maior para todos os escudos */
+            height: 70px; /* Altura base maior para todos os escudos */
+            object-fit: contain;
+            
+            margin-right: 10px; /* Pequeno espaço à direita do escudo */
+        }
+
+        /* **** NOVO: Regras de tamanho para cada rank **** */
+        .team-result-img[data-rank="1"] {
+            width: 90px;
+            height: 90px;
+        }
+
+        .team-result-img[data-rank="2"] {
+            width: 75px;
+            height: 75px;
+        }
+
+        .team-result-img[data-rank="3"] {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Para ranks maiores que 3, eles usarão o tamanho padrão de .team-result-img (70x70px)
+           ou você pode adicionar mais regras se tiver mais times e quiser que diminuam */
+        .team-result-img[data-rank="4"] {
+            width: 55px;
+            height: 55px;
+        }
+
         .results-container li span:last-child {
             background-color: #011b92;
             padding: 5px 10px;
@@ -102,9 +127,10 @@
         }
         .countdown {
             color: #fcfafa;
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 1.2em;
             text-align: center;
+            margin-bottom: 20px; 
         }
     </style>
 </head>
@@ -129,7 +155,7 @@
         </div>
     </div>
 
-    <p class="countdown">Você será redirecionado para a página inicial em <span id="timer">7</span> segundos...</p>
+    <p class="countdown">Interaja com a página para voltar à inicial.</p>
 
     <!-- Script para carregar e exibir os resultados e lidar com o temporizador -->
     <script src="script_resultados_gerais.js"></script>

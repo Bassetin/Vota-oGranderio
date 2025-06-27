@@ -1,8 +1,8 @@
 #logo {
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 10px;        /* Define a distância do topo (ajuste conforme necessário) */
+    top: -60px;        /* Define a distância do topo (ajuste conforme necessário) */
     left: 10px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 260px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    width: 380px;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
 }
@@ -41,9 +41,9 @@ figcaption {
 
 #wifi{
     position: absolute;
-    top: 300px;
+    top: 330px;
     left: 50px;
-    width: 250px;
+    width: 170px;
     height: auto;     /* A altura se ajustará proporcionalmente */
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
@@ -52,9 +52,9 @@ figcaption {
     transform: scale(1.1); /* Cresce a taça em 10% ao passar o mouse */}
 #cam{
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 350px;        /* Define a distância do topo (ajuste conforme necessário) */
+    top: 360px;        /* Define a distância do topo (ajuste conforme necessário) */
     left: 390px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 185px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    width: 135px;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
      cursor: pointer;
@@ -65,8 +65,8 @@ figcaption {
 }#tech{
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
     top: 350px;        /* Define a distância do topo (ajuste conforme necessário) */
-    left: 650px;       /* Define a distância da esquerda (ajuste conforme necessário) */
-    width: 300px;      /* Defina a largura da imagem (ajuste conforme necessário) */
+    left: 720px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    width: 240px;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */
     cursor: pointer;
@@ -77,8 +77,8 @@ figcaption {
 }
 #robo{
     position: absolute; /* Remove do fluxo normal e permite posicionamento absoluto */
-    top: 320px;        /* Define a distância do topo (ajuste conforme necessário) */
-    left: 1000px;       /* Define a distância da esquerda (ajuste conforme necessário) */
+    top: 322px;        /* Define a distância do topo (ajuste conforme necessário) */
+    left: 1130px;       /* Define a distância da esquerda (ajuste conforme necessário) */
     width: 180px;      /* Defina a largura da imagem (ajuste conforme necessário) */
     height: auto;     /* A altura se ajustará proporcionalmente */
     z-index: 1000;     /* Garante que a imagem fique acima de outros elementos (opcional) */

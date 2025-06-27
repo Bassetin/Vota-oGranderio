@@ -21,16 +21,17 @@ const db = new sqlite3.Database('./votos.db', (err) => {
     } else {
         console.log('Conectado ao banco de dados SQLite.');
 
-        // **** TABELA ÚNICA: users_votes ****
+        // **** TABELA ÚNICA: users_votes (COM NOVO CAMPO 'curso_interesse') ****
         // client_id é AUTOINCREMENT. nome, email e telefone são NOT NULL (na inserção) e email/telefone UNIQUE.
         db.run(`CREATE TABLE IF NOT EXISTS users_votes (
-            client_id INTEGER PRIMARY KEY AUTOINCREMENT,   -- ID único do cliente (gerado pelo DB na inserção)
-            nome TEXT NOT NULL,                           -- Nome do cliente (obrigatório na inserção)
-            email TEXT UNIQUE NOT NULL,                   -- E-mail do cliente (obrigatório e único)
-            telefone TEXT UNIQUE NOT NULL,                -- Telefone do cliente (obrigatório e único)
-            team_vote TEXT,                               -- Voto do time (pode ser NULL se pular a votação)
-            tech_vote TEXT,                               -- Voto da tecnologia (pode ser NULL se pular a votação)
-            data_registro DATETIME DEFAULT CURRENT_TIMESTAMP -- Data/hora do registro
+            client_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            telefone TEXT UNIQUE NOT NULL,
+            curso_interesse TEXT,                         -- **** NOVO CAMPO: Tipo de curso de interesse ****
+            team_vote TEXT,
+            tech_vote TEXT,
+            data_registro DATETIME DEFAULT CURRENT_TIMESTAMP
         )`, (err) => {
             if (err) {
                 console.error('Erro ao criar tabela users_votes:', err.message);
@@ -41,13 +42,18 @@ const db = new sqlite3.Database('./votos.db', (err) => {
     }
 });
 
+
+// Rotas de votação (sem client_id, armazenam em sessionStorage no frontend)
+// (Mantidas como stubs para organização, mas não processam votos diretamente aqui)
+
 // --- Rota para Registrar Dados do Cliente (Agora a Principal Rota de Inserção) ---
-// Recebe nome, email, telefone, team_vote e tech_vote.
+// Recebe nome, email, telefone, team_vote, tech_vote E curso_interesse.
 // Insere um novo registro COMPLETO.
 app.post('/register-client', (req, res) => {
-    const { nome, email, telefone, team_vote, tech_vote } = req.body;
+    const { nome, email, telefone, curso_interesse, team_vote, tech_vote } = req.body; // **** NOVO: curso_interesse no body ****
 
-    // Validação de campos obrigatórios do cadastro
+    // Validação de campos obrigatórios do cadastro (nome, email, telefone)
+    // curso_interesse pode ser opcional ou ter validação específica no frontend
     if (!nome || !email || !telefone) {
         return res.status(400).json({ message: 'Nome, e-mail e telefone são obrigatórios.' });
     }
@@ -56,8 +62,6 @@ app.post('/register-client', (req, res) => {
         db.run('BEGIN TRANSACTION;');
 
         // 1. Verifica se o e-mail ou telefone já estão em uso.
-        // Como ambos são UNIQUE na tabela, tentar inserir diretamente com um duplicado causará um erro.
-        // Fazemos uma pré-verificação para dar uma mensagem mais amigável.
         db.get(`SELECT client_id FROM users_votes WHERE email = ? OR telefone = ?`, [email, telefone], (err, row) => {
             if (err) {
                 db.run('ROLLBACK;', () => {
@@ -67,7 +71,7 @@ app.post('/register-client', (req, res) => {
                 return;
             }
 
-            if (row) { // Se 'row' existe, significa que o e-mail ou telefone já estão em uso
+            if (row) {
                 db.run('ROLLBACK;', () => {
                     console.warn(`Tentativa de cadastro com e-mail (${email}) ou telefone (${telefone}) já existente.`);
                     return res.status(409).json({ message: 'Usuário já existente, e-mail ou telefone já cadastrado.' });
@@ -77,8 +81,8 @@ app.post('/register-client', (req, res) => {
 
             // 2. Se e-mail e telefone são únicos, insere o novo registro completo.
             // O client_id será gerado automaticamente pelo AUTOINCREMENT.
-            const insertSql = `INSERT INTO users_votes (nome, email, telefone, team_vote, tech_vote) VALUES (?, ?, ?, ?, ?)`;
-            db.run(insertSql, [nome, email, telefone, team_vote, tech_vote], function(err) {
+            const insertSql = `INSERT INTO users_votes (nome, email, telefone, curso_interesse, team_vote, tech_vote) VALUES (?, ?, ?, ?, ?, ?)`; // **** NOVO: curso_interesse na query ****
+            db.run(insertSql, [nome, email, telefone, curso_interesse, team_vote, tech_vote], function(err) { // **** NOVO: curso_interesse no array de parâmetros ****
                 if (err) {
                     db.run('ROLLBACK;', () => {
                         console.error('Erro ao inserir novo registro completo:', err.message);
@@ -94,7 +98,7 @@ app.post('/register-client', (req, res) => {
                         console.error('Erro no commit da transação (register-client):', commitErr.message);
                         return res.status(500).json({ message: 'Erro interno ao finalizar cadastro.' });
                     }
-                    console.log(`Novo cliente registrado: ID ${newClientId}, Nome ${nome}, E-mail ${email}, Telefone ${telefone}`);
+                    console.log(`Novo cliente registrado: ID ${newClientId}, Nome ${nome}, E-mail ${email}, Telefone ${telefone}, Curso: ${curso_interesse}`); // **** NOVO: Log do curso ****
                     res.status(201).json({ message: 'Cliente registrado com sucesso!', client_id: newClientId });
                 });
             });
